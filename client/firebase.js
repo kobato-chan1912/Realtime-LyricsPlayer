@@ -65,7 +65,7 @@ $("#add_title").click(function () {
       confirmButtonText: 'Look up',
       showLoaderOnConfirm: true,
       preConfirm: (login) => {
-         return fetch(`http://localhost:3000/api/getSong/${login}`)
+         return fetch(`https://zingapi.azurewebsites.net/${login}`)
             .then(response => {
                if (!response.ok) {
                   throw new Error(response.statusText)
