@@ -6,29 +6,29 @@ $('.btn-play').click();
 
 // userName first.
 
-var userName;
-var src = "images/node-white.png"
-Swal.fire({
-   title: 'Nhập tên đăng nhập',
-   text: 'Tên đăng nhập sẽ hiển thị khi chat',
-
-   html: `<img src="images/node-white.png" width="180px">`,
-   // text: "Tên đăng nhậ",
-   input: 'text',
-   inputAttributes: {
-      autocapitalize: 'off'
-   },
-   confirmButtonText: 'Vào',
-   showLoaderOnConfirm: true,
-   preConfirm: (login) => {
-
-      userName = login;
-      $("video").prop('muted', false);
-      $("video").hide();
-
-   },
-   allowOutsideClick: () => !Swal.isLoading()
-});
+var userName = "admin";
+// var src = "images/node-white.png"
+// Swal.fire({
+//    title: 'Nhập tên đăng nhập',
+//    text: 'Tên đăng nhập sẽ hiển thị khi chat',
+// 
+//    html: `<img src="images/node-white.png" width="180px">`,
+//    // text: "Tên đăng nhậ",
+//    input: 'text',
+//    inputAttributes: {
+//       autocapitalize: 'off'
+//    },
+//    confirmButtonText: 'Vào',
+//    showLoaderOnConfirm: true,
+//    preConfirm: (login) => {
+// 
+//       userName = login;
+//       $("video").prop('muted', false);
+//       $("video").hide();
+// 
+//    },
+//    allowOutsideClick: () => !Swal.isLoading()
+// });
 
 // chat render. 
 
