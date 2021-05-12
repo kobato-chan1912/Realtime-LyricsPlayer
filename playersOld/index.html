@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>Lyrics Player</title>
+   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:300,400,600'>
+   <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+
+   <!-- partial:index.partial.html -->
+   <div class="content">
+      <div class="lyrics"></div>
+   </div>
+
+   <div class="player">
+      <div class="left" id='cover' style="width: 80px;
+   background-size: cover;"></div>
+      <div class="right">
+         <div class="top">
+            <a class="song" id='title'
+               href="https://open.spotify.com/track/52LlzTfdulBMiwH4BZy5Sq?si=1c1rwqNYSf6ZaaRbzlstLQ"></a>
+            <a class="artist" id='artist'
+               href="https://open.spotify.com/artist/6OqhFYFJDnBBHas02HopPT?si=vQaSwY1DRkyhj-eoKZlMrw"></a>
+         </div>
+         <div class="bottom">
+            <video id='music' name="media" controls autoplay muted controlsList="nodownload">
+               <source src="" type="audio/mpeg">
+            </video>
+         </div>
+      </div>
+   </div>
+   <div class="songs">
+      <div id="playlist">
+         <h1>Playlist: </h1>
+         <div class="form" style="padding-top: 20px;">
+            <input type="text" name="idZing" autocomplete="off" placeholder="Nhập ID từ ZING MP3" />
+
+         </div>
+         <div id="track-list">
+           
+         </div>
+      </div>
+      <div id="chat-rev" style="padding-top: 40px;">
+         <div id="text-1"><span style="font-weight: bold;">Danny:</span> <span>Hello </span></div>
+
+      </div>
+      <style>
+         .form input {
+            width: 250px;
+            height: 100%;
+            color: #fff;
+            padding-top: 20px;
+            border: none;
+            background-color: #ffffff47;
+            border-radius: 25px;
+            padding: 10px;
+         }
+
+         .form label {
+            position: absolute;
+            bottom: 0px;
+            left: 10px;
+            width: 95%;
+            height: 100%;
+            pointer-events: none;
+            border-bottom: 1px solid white;
+         }
+
+         .form label::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            border-bottom: 3px solid #fcfcfc;
+            transform: translateX(-100%);
+            transition: all 0.3s ease;
+         }
+
+         .content-name {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            padding-bottom: 5px;
+            transition: all 0.3s ease;
+         }
+
+         .form input:focus {
+            outline: none;
+         }
+
+         .form input:focus+.label-name .content-name,
+         .form input:valid+.label-name .content-name {
+            transform: translateY(-150%);
+            font-size: 14px;
+            left: 0px;
+            color: #fce38a;
+         }
+
+         .form input:focus+.label-name::after,
+         .form input:valid+.label-name::after {
+            transform: translateX(0%);
+         }
+      </style>
+      <div class="form" style="padding-top: 40px;">
+         <input type="text" id='message' name="text" autocomplete="off" required />
+         <label for="text" class="label-name">
+            <span class="content-name">
+               Nhập nội dung chat
+            </span>
+         </label>
+      </div>
+
+
+
+   </div>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script src="https://lyswhut.github.io/lrc-file-parser/dist/lrc-file-parser.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+   <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+         apiKey: "AIzaSyCvKcXjyJ5FNgYC51wpas7ytYoiYWOX7X0",
+         authDomain: "music-players-fefc8.firebaseapp.com",
+         projectId: "music-players-fefc8",
+         storageBucket: "music-players-fefc8.appspot.com",
+         messagingSenderId: "685209752093",
+         appId: "1:685209752093:web:452c2c041aba1376d72cf4",
+         measurementId: "G-P28DELBTZL"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+
+   </script>
+   <script src="./script.js"></script>
+   <script src="./firebase.js"></script>
+
+</body>
+
+</html>

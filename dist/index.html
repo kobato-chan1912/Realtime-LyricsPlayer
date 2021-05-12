@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Music app - TweenMax</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <div class="background" id='bgm' style="background-image: url(https://source.unsplash.com/Q7PclNhVRI0);
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+  filter: blur(30px);">
+    <div class="blur" style="background: rgba(255, 255, 255, 0.2);
+    /* backdrop-filter: blur(29px); */
+    height: 100%;
+    width: 100%;
+    /* filter: blur(25px);"></div>
+  </div>
+
+  <div class="wrapper">
+    <!-- Wave bg-->
+    <div class="wave-container">
+    </div>
+    <div class="text-wrap">
+      <div class="content">
+        <div class="lyrics"></div>
+      </div>
+    </div>
+    <div class="header">
+      <div class="burger-wrapper">
+        <div class="burger"></div>
+      </div>
+      <div class="logo-text">Chat</div>
+      <div class="back_btn">
+        <div class="circle"></div>
+        <div class="text">Back</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="image">
+        <img style="width: 60%;" src="images/node-large.png" alt="">
+      </div>
+      <ul class="nav_main" id="messages">
+        <!-- <li><span>Danny: </span><span>Hi</span></li>
+        <li><span>Danny: </span><span>Hi</span></li>
+        <li><span>Danny: </span><span>Hi</span></li> -->
+      </ul>
+      <div class="nav_divider"></div>
+      <style>
+        .form__group {
+          position: relative;
+          padding: 15px 0 0;
+          margin-top: 10px;
+          width: 50%;
+        }
+
+        .form__field {
+          font-family: inherit;
+          width: 100%;
+          border: 0;
+          border-bottom: 2px solid #9b9b9b;
+          outline: 0;
+          font-size: 1.3rem;
+          color: #504f4f;
+          padding: 7px 0;
+          background: transparent;
+          transition: border-color 0.2s;
+        }
+
+        .form__field::placeholder {
+          color: transparent;
+        }
+
+        .form__field:placeholder-shown~.form__label {
+          font-size: 1.3rem;
+          cursor: text;
+          top: 20px;
+        }
+
+        .form__label {
+          position: absolute;
+          top: 0;
+          display: block;
+          transition: 0.2s;
+          font-size: 1rem;
+          color: #9b9b9b;
+        }
+
+        .form__field:focus {
+          padding-bottom: 6px;
+          font-weight: 700;
+          border-width: 3px;
+          border-image: linear-gradient(to right, #11998e, #38ef7d);
+          border-image-slice: 1;
+        }
+
+        .form__field:focus~.form__label {
+          position: absolute;
+          top: 0;
+          display: block;
+          transition: 0.2s;
+          font-size: 1rem;
+          color: #11998e;
+          font-weight: 700;
+        }
+
+        /* reset input */
+        .form__field:required,
+        .form__field:invalid {
+          box-shadow: none;
+        }
+        
+      </style>
+      <div class="form__group field" style="margin: 4vh 6vw;">
+        <input type="input" id="message" class="form__field" placeholder="Name" name="name" id='name' />
+        <label for="name" class="form__label">Nội dung chat</label>
+      </div>
+
+    </div>
+    <div class="mini-player">
+      <video id='music' name="media" controls autoplay muted>
+        <source src="" type="audio/mpeg">
+      </video>
+
+      <div class="track_info_wrapper">
+        <div class="track_info">
+          <div class="thumb playerCover"></div>
+          <div class="info">
+            <div class="title playerTitle"></div>
+            <div class="artist playerArtist"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mini-player_btn_wrapper">
+        <div class="btn-switch">
+          <i class="btn-pause fa fa-pause" aria-hidden="true"></i>
+
+          <i class="btn-play fa fa-play" aria-hidden="true"></i>
+        </div><i class="btn-open-player fa fa-list" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="dim"></div>
+    <div class="player" id="player">
+      <div class="playback_wrapper">
+        <div class="playback_blur playerCover"></div>
+        <div class="playback_thumb playerCover"></div>
+        <div class="playback_info">
+          <div class="title playerTitle "></div>
+          <div class="artist playerArtist"></div>
+        </div>
+        <div class="playback_btn_wrapper"></i>
+          <div class="btn-switch"><i class="btn-play fa fa-play" aria-hidden="true"></i><i class="btn-pause fa fa-pause"
+              aria-hidden="true"></i></div>
+        </div>
+
+      </div>
+      <div class="list_wrapper">
+        <div class="btn" id='add_title' style="
+        padding-left: 6px;
+        color: black;
+        cursor: pointer;
+    ">Thêm bài hát vào list</div>
+        <ul class="list">
+          <li class="list_item selected">
+            <div class="thumb playerCover"> </div>
+            <div class="info">
+              <div class="title playerTitle"></div>
+              <div class="artist playerArtist"></div>
+            </div>
+          </li>
+          <ul id="track-list">
+
+          </ul>
+        </ul>
+      </div>
+    </div>
+    <div class="page" id="curator">
+      <div class="curator_title_wrapper"><span>LP</span>
+        <div class="curator_line"></div>
+        <div class="curator_title">Listeners</div>
+        <div class="curator_line"></div><span>14</span>
+      </div>
+      <div class="curator_list">
+        <div class="curator_list_content">
+          <div class="connect_btn_wrapper item">
+            <div class="connect_btn">
+              <div class="connect_btn_text">Connect <br />SoundCloud</div>
+            </div>
+          </div>
+          <div class="curator_list_content_desc">Or Select <br />a Listener of <br />L.P. </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb"></div>
+            <div class="info">
+              <div class="name">Fantasy</div>
+              <div class="desc">Sam</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- library -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TimelineMax.min.js'></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+  <script src="https://lyswhut.github.io/lrc-file-parser/dist/lrc-file-parser.js"></script>
+
+
+
+
+
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyCvKcXjyJ5FNgYC51wpas7ytYoiYWOX7X0",
+      authDomain: "music-players-fefc8.firebaseapp.com",
+      projectId: "music-players-fefc8",
+      storageBucket: "music-players-fefc8.appspot.com",
+      messagingSenderId: "685209752093",
+      appId: "1:685209752093:web:452c2c041aba1376d72cf4",
+      measurementId: "G-P28DELBTZL"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+
+  </script>
+  <script src="./script.js"></script>
+  <script src="firebase.js"></script>
+  <script>
+    // const endpoint = 'http://localhost:3000/api/getSong/ZWBUCUAC';
+    // fetch(endpoint)
+    //   .then((response) => response.json())
+    //   .then((data) => 
+    //   
+    //   console.log(data.artist)
+    //   
+    //   
+    //   );
+
+
+
+  </script>
+</body>
+
+</html>
