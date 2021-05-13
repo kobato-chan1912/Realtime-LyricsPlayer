@@ -57,6 +57,7 @@ $('#message').on('keypress', function (e) {
 $("#add_title").click(function () {
    Swal.fire({
       title: 'Nhập ID từ ZING MP3',
+      html: `<img src="/client/images/node-white.png" width="180px">`,
       input: 'text',
       inputAttributes: {
          autocapitalize: 'off'
