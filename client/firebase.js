@@ -7,12 +7,12 @@ $('.btn-play').click();
 // userName first.
 
 var userName;
-var src = "images/node-white.png"
+var src = "/client/images/node-white.png"
 Swal.fire({
    title: 'Nhập tên đăng nhập',
    text: 'Tên đăng nhập sẽ hiển thị khi chat',
 
-   html: `<img src="images/node-white.png" width="180px">`,
+   html: `<img src="/client/images/node-white.png" width="180px">`,
    // text: "Tên đăng nhậ",
    input: 'text',
    inputAttributes: {
