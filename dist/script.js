@@ -1,7 +1,7 @@
 
 // ===== Open Nav =====
 $( ".burger-wrapper" ).click(function() {
-	
+
 	// ===== If Nav is not open	
 	if($('.nav').css("display") == "none"){
 		TweenMax.to(".dim", 0.5, {opacity: 1, display: 'block', ease: Power2.easeInOut});

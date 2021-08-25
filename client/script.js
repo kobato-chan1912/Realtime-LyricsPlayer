@@ -1,13 +1,17 @@
 
 // ===== Open Nav =====
 $( ".burger-wrapper" ).click(function() {
-	
+	console.log("Bugger Clicked")
+	setTimeout(() => 	$("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000)
+	, 500);
+
+
 	// ===== If Nav is not open	
 	if($('.nav').css("display") == "none"){
 		TweenMax.to(".dim", 0.5, {opacity: 1, display: 'block', ease: Power2.easeInOut});
 		TweenMax.fromTo(".nav", 0.5, {xPercent: -100}, 
 									{xPercent: 0, display: 'block', ease: Expo.easeOut});
-		TweenMax.staggerFrom('.nav li', 0.5, {opacity:0, y: 20, ease: Power2.easeInOut}, 0.1);
+		// TweenMax.staggerFrom('.nav li', 0.5, {opacity:0, y: 20, ease: Power2.easeInOut}, 0.1);
 		
 		$('.logo-text').css({'opacity': '0', 'display': 'none'});
   }
