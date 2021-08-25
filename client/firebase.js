@@ -1,5 +1,7 @@
 $('video').trigger('pause');
 $('video').trigger('play');
+$("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+
 
 $('.btn-play').click();
 
@@ -46,8 +48,12 @@ $('#message').on('keypress', function (e) {
          "sender": userName,
          "message": $('#message').val()
       });
+      $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+
+
 
       $('#message').val('');
+
 
    }
 });
