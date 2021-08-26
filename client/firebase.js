@@ -289,24 +289,31 @@ function appendData() {
                         nextCoverArt = childSnapshot.val().coverArt;
                         nextStreaming = childSnapshot.val().streamingURL;
                         nextLyrics = childSnapshot.val().lyrics;
-                        firebase.database().ref("playing").update({
+                        setTimeout(() => firebase.database().ref("playing").update({
                            "artist": nextArtist,
                            "coverArt": nextCoverArt,
                            "lyrics": nextLyrics,
                            "streamingURL": nextStreaming,
                            "title": nextTitle,
                            "playing_seconds": 0
-                        });
+                        })
+                     , 2500);
                      }
                   });
                   // update new playing.
 
                });
                // Delete the first element in playlist // 
-               var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
-               var stringID = firstID.replace("track", ""); // id in Database. 
-               firebase.database().ref("playlist").child(stringID).remove();
-               $('#' + firstID).remove();
+
+               try {
+                  var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
+                  var stringID = firstID.replace("track", ""); // id in Database. 
+                  firebase.database().ref("playlist").child(stringID).remove();
+                  $('#' + firstID).remove();
+   
+               } catch (error) {
+                  console.log("FirstID is not available")
+               }
 
 
 

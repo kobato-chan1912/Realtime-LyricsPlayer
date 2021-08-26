@@ -65,7 +65,7 @@ $("#add_title").click(function () {
       confirmButtonText: 'Look up',
       showLoaderOnConfirm: true,
       preConfirm: (login) => {
-         return fetch(`https://zingapi.azurewebsites.net/api/getSong/${login}`)
+         return fetch(`http://192.3.60.13:3000/api/getSong/${login}`)
             .then(response => {
                if (!response.ok) {
                   throw new Error(response.statusText)
@@ -100,7 +100,7 @@ $("#add_title").click(function () {
             // 
 
             $("video").each(function () {
-   
+
                if (this.currentTime == this.duration) { // if end player. 
                   // update the playing ref table
                   firebase.database().ref("playing").update({
@@ -123,12 +123,12 @@ $("#add_title").click(function () {
                   });
                }
             });
-            
-            
 
 
 
-            
+
+
+
 
          }
 
@@ -167,7 +167,7 @@ function appendData() {
       // Read RLC File. 
 
       ReadInput(snapshot.val().lyrics);
-      console.log(input);
+      // console.log(input);
 
 
       var lyricsJSON;
@@ -283,54 +283,67 @@ function appendData() {
                         nextCoverArt = childSnapshot.val().coverArt;
                         nextStreaming = childSnapshot.val().streamingURL;
                         nextLyrics = childSnapshot.val().lyrics;
-                        firebase.database().ref("playing").update({
+
+                        // settimeout. 
+
+                        setTimeout(() => firebase.database().ref("playing").update({
                            "artist": nextArtist,
                            "coverArt": nextCoverArt,
                            "lyrics": nextLyrics,
                            "streamingURL": nextStreaming,
                            "title": nextTitle,
                            "playing_seconds": 0
-                        });
-                     }
+                        })
+                     , 2500);
+
+
+
+               }
                   });
-                  // update new playing.
+         // update new playing.
 
-               });
-               // Delete the first element in playlist // 
-               var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
-               var stringID = firstID.replace("track", ""); // id in Database. 
-               firebase.database().ref("playlist").child(stringID).remove();
-               $('#' + firstID).remove();
+      });
+      // Delete the first element in playlist // 
+
+      try {
+         var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
+         var stringID = firstID.replace("track", ""); // id in Database. 
+         firebase.database().ref("playlist").child(stringID).remove();
+         $('#' + firstID).remove();
+
+      } catch (error) {
+         console.log("first ID not appeared")
+      }
 
 
 
 
-            }
+   }
 
 
          });
       }, 1000);
 
-      generate();
+generate();
 
-      function generate() {
-         var html = "";
-         for (var i = 0; i < _data["lyrics"].length; i++) {
-            html += "<div";
-            if (i == 0) {
-               html += ` class="highlighted"`;
-               currenttext = 0;
-            }
-            if (_data["lyrics"][i]["note"]) {
-               html += ` note="${_data["lyrics"][i]["note"]}"`;
-            }
-            html += ">";
-            html += _data["lyrics"][i]["text"] == "" ? "•" : _data["lyrics"][i]["text"];
-            html += "</div>"
-         }
-         $(".lyrics").html(html);
-         align();
+function generate() {
+   var html = "";
+   for (var i = 0; i < _data["lyrics"].length; i++) {
+      html += "<div";
+      if (i == 0) {
+         html += ` class="highlighted"`;
+         currenttext = 0;
       }
+      if (_data["lyrics"][i]["note"]) {
+         html += ` note="${_data["lyrics"][i]["note"]}"`;
+      }
+      html += ">";
+      html += _data["lyrics"][i]["text"] == "" ? "•" : _data["lyrics"][i]["text"];
+      html += "</div>"
+   }
+   $(".lyrics").html(html);
+   align();
+}
 
    });
 }
