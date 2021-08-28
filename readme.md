@@ -1,25 +1,31 @@
-Mò mẫm cuối cùng cũng xong :3 chợt tách được con api nên làm luôn cái app nhẹ search => get src bài hát trả về lyrics :3
-Tại lâu rồi cũng không tham gia mấy vụ reverse này kia nên cũng quên nhẹ mấy cái sha256 này kia nên cũng hơi quần xíu :))) 
-Nói chung là app sẽ get get quả đầu tiên được search => trả về src và lyrics như hình qua API vừa tách. 
-Main stack:
-- Front-end: jquery.  
-- Back-end: Yii.
-- npm:
-+ lrc-file-parser hỗ trợ parser LRC. 
-+ nodeJS hỗ trợ crawl api (/với puppeteer extra)
+# Realtime Player 
+## _Open-Source_
 
-Setting headless: 
 
-const chromeOptions = {
-  headless:false,
-  defaultViewport: null};
-(async function main() {
-    // main crawl here
-})()
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Sẽ update git với deploy sau :3 giờ đi coi bóng banh :(
+This is an web application which built for realtime-streaming audio song.
+Here is its technology stack:
 
-=> Hướng mở rộng (có thể sẽ làm sau):
-+ Web RTC / Socket.io => get buffer để keep streaming online. 
-+ Chatbox qua Firebase hoặc Pusher Service. 
-+ Queue (hàng đợi) => Chọn bài hát vào hàng đợi.
+- VueJS
+- NodeJS: Used Puppeter for crawl data from ZingMP3 API.
+- ✨ Firebase: Used to solve the realtime method. ✨
+
+## Features
+
+- Listen audio completely 100% realtime. 
+- Chat feature. 
+- Request song throught ID Song of Zing MP3. The song will be added to Queue as FIFO method.
+
+## Deploy
+
+This web app has been deployed in Microsoft Azure (for Backend) and Firebase Hosting (for Client):
+
+- [Player Here](https://players-f1cdf.web.app/client) - Click the link here. 
+
+or 
+
+```sh
+https://players-f1cdf.web.app/client
+```
+
