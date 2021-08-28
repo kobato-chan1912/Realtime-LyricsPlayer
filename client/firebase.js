@@ -107,6 +107,15 @@ firebase.database().ref("messages").on("child_added", function (snapshot) {
 
    // }
 });
+firebase.database().ref("messages").endAt().limitToLast(1).on('child_added', function(snapshot) {
+
+   // all records after the last continue to invoke this function
+   $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+
+});
+
+
+
 $('#message').on('keypress', function (e) {
    if (e.which === 13) {
       // console.log(userName);
