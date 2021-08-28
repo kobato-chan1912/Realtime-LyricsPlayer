@@ -203,11 +203,6 @@ function appendData() {
       });
 
 
-
-
-
-
-
       // src for audio. 
       firebase.database().ref('currentTime').once('value').then(function (second) {
          let url = snapshot.val().streamingURL + "#t=" + second.val().seconds;
@@ -258,16 +253,14 @@ function appendData() {
             // console.log(this.currentTime);
             firebase.database().ref("currentTime").update({ seconds: this.currentTime });
 
-            function deleteFirstElement() {
-               var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
-               var stringID = firstID.replace("track", ""); // id in Database. 
-               firebase.database().ref("playlist").child(stringID).remove();
-               $('#' + firstID).remove();
-            }
-
             if (this.currentTime == this.duration) { // if end player. 
 
                clearInterval(updateCurrent);
+               // var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
+               // var stringID = firstID.replace("track", ""); // id in Database. 
+               // console.log(stringID)
+               // firebase.database().ref("playlist").child(stringID).remove();
+               // $('#' + firstID).remove();
 
                // var listLength = $('#track-list li').length;
                // console.log(listLength);
@@ -284,66 +277,61 @@ function appendData() {
                         nextStreaming = childSnapshot.val().streamingURL;
                         nextLyrics = childSnapshot.val().lyrics;
 
+                        // delete the first element // 
+
                         // settimeout. 
+                        function updateSong() {
+                           firebase.database().ref("playing").update({
+                              "artist": nextArtist,
+                              "coverArt": nextCoverArt,
+                              "lyrics": nextLyrics,
+                              "streamingURL": nextStreaming,
+                              "title": nextTitle,
+                              "playing_seconds": 0
+                           })
 
-                        setTimeout(() => firebase.database().ref("playing").update({
-                           "artist": nextArtist,
-                           "coverArt": nextCoverArt,
-                           "lyrics": nextLyrics,
-                           "streamingURL": nextStreaming,
-                           "title": nextTitle,
-                           "playing_seconds": 0
-                        })
-                     , 2500);
+                        }
 
+                        setTimeout(updateSong, 2500)
 
-
-               }
+                     }
                   });
-         // update new playing.
+                  // update new playing.
 
-      });
-      // Delete the first element in playlist // 
-
-      try {
-         var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
-         var stringID = firstID.replace("track", ""); // id in Database. 
-         firebase.database().ref("playlist").child(stringID).remove();
-         $('#' + firstID).remove();
-
-      } catch (error) {
-         console.log("first ID not appeared")
-      }
+               });
+               // Delete the first element in playlist // 
 
 
 
 
-   }
+
+
+            }
 
 
          });
       }, 1000);
 
-generate();
+      generate();
 
-function generate() {
-   var html = "";
-   for (var i = 0; i < _data["lyrics"].length; i++) {
-      html += "<div";
-      if (i == 0) {
-         html += ` class="highlighted"`;
-         currenttext = 0;
+      function generate() {
+         var html = "";
+         for (var i = 0; i < _data["lyrics"].length; i++) {
+            html += "<div";
+            if (i == 0) {
+               html += ` class="highlighted"`;
+               currenttext = 0;
+            }
+            if (_data["lyrics"][i]["note"]) {
+               html += ` note="${_data["lyrics"][i]["note"]}"`;
+            }
+            html += ">";
+            html += _data["lyrics"][i]["text"] == "" ? "•" : _data["lyrics"][i]["text"];
+            html += "</div>"
+         }
+         $(".lyrics").html(html);
+         align();
       }
-      if (_data["lyrics"][i]["note"]) {
-         html += ` note="${_data["lyrics"][i]["note"]}"`;
-      }
-      html += ">";
-      html += _data["lyrics"][i]["text"] == "" ? "•" : _data["lyrics"][i]["text"];
-      html += "</div>"
-   }
-   $(".lyrics").html(html);
-   align();
-}
 
    });
 }
@@ -355,9 +343,21 @@ appendData();
 
 // Catching in child_changed playing. 
 firebase.database().ref("playing").on("child_changed", function (snapshot) {
-   console.log("has changed");
-   firebase.database().ref("currentTime").update({ seconds: 0 });
-   appendData();
+   if (snapshot.key == "title") {
+      console.log("has changed");
+      try {
+         var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
+         var stringID = firstID.replace("track", ""); // id in Database. 
+         // console.log(stringID)
+         firebase.database().ref("playlist").child(stringID).remove();
+         $('#' + firstID).remove();   
+      } catch (error) {
+         
+      }
+
+      firebase.database().ref("currentTime").update({ seconds: 0 });
+      appendData();
+   }
 });
 
 firebase.database().ref("playlist").on("child_added", function (snapshot) {
