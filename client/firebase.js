@@ -39,19 +39,73 @@ Swal.fire({
 
 // chat render. 
 
+// Render Stickers // 
+
+var storage = firebase.storage();
+
+// Create a storage reference from our storage service
+var storageRef = storage.ref();
+// Create a child reference
+var imagesRef = storageRef.child('gifs');
+
+// Find all the prefixes and items.
+imagesRef.listAll()
+   .then((res) => {
+
+      res.items.forEach((itemRef) => {
+
+         itemRef.getDownloadURL().then(function (url) {
+            
+            let html = ""
+            html += `<span class="intercom-emoji-picker-emoji" title="thumbs_up">
+                        <img src="${url}" width="50px" alt="">
+                        </span>`
+            document.getElementById('stickers').innerHTML += html
+
+         }).catch(function (error) {
+            // Handle any errors
+         });
+      });
+      res.prefixes.forEach((folderRef) => {
+         console.log("folder", folderRef._delegate._location.path_.split('/')[1])// In my case:)
+
+      });
+   }).catch((error) => {
+      // Uh-oh, an error occurred!
+   });
+
 
 firebase.database().ref("messages").on("child_added", function (snapshot) {
    var html = "";
-   if (snapshot.val().sender == "Huỳnh Lucky" || snapshot.val().sender == "Dũng Admin"){
-      html += `<li><span style="color: red">${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
+   let message = snapshot.val().message;
+   let htmlSender = ""
+   let sender = snapshot.val().sender;
+   if (sender == "Dũng Admin" || sender == "Huỳnh Lucky"){
+      htmlSender = `<li><span style="color: red">`
+   }
+   else {
+      htmlSender = `<li><span>`
+   }
+   if (message.includes("alt=media") == true) {
+      html += `${htmlSender}${snapshot.val().sender}: </span><span><img src='${snapshot.val().message}' width="50px"></span></li>`;
+      document.getElementById("messages").innerHTML += html;
+   }
+   else {
+      html += `${htmlSender}${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
       document.getElementById("messages").innerHTML += html;
 
    }
-   else {
-      html += `<li><span>${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
-      document.getElementById("messages").innerHTML += html;
-   
-   }
+
+   // if (snapshot.val().sender == "Huỳnh Lucky" || snapshot.val().sender == "Dũng Admin"){
+   //    html += `<li><span style="color: red">${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
+   //    document.getElementById("messages").innerHTML += html;
+
+   // }
+   // else {
+   // html += `<li><span>${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
+   // document.getElementById("messages").innerHTML += html;
+
+   // }
 });
 $('#message').on('keypress', function (e) {
    if (e.which === 13) {
@@ -67,6 +121,17 @@ $('#message').on('keypress', function (e) {
    }
 });
 
+$(document).on("click", ".intercom-emoji-picker-emoji", function (e) {
+   // input.val(input.val() + $(this) + " ");
+   let span = $(this)[0]
+   let img = span.children[0]
+   firebase.database().ref("messages").push().set({
+      "sender": userName,
+      "message": img.src
+   });
+   $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+   $(".intercom-composer-emoji-popover").removeClass("active");
+});
 // Add song. 
 
 $("#add_title").click(function () {
@@ -365,9 +430,9 @@ firebase.database().ref("playing").on("child_changed", function (snapshot) {
          var stringID = firstID.replace("track", ""); // id in Database. 
          // console.log(stringID)
          firebase.database().ref("playlist").child(stringID).remove();
-         $('#' + firstID).remove();   
+         $('#' + firstID).remove();
       } catch (error) {
-         
+
       }
       firebase.database().ref("currentTime").update({ seconds: 0 });
       appendData();

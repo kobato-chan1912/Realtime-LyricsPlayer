@@ -10,12 +10,7 @@ $(document).click(function (e) {
 });
 
 
-$(document).on("click", ".intercom-emoji-picker-emoji", function (e) {
-    var input = $("#message");
-    // input.val(input.val() + $(this) + " ");
-    input.val($('#message').val() + $(this).html());
-    $(".intercom-composer-emoji-popover").removeClass("active");
-});
+
 
 $('.intercom-composer-popover-input').on('input', function () {
     var query = this.value;
