@@ -21,7 +21,7 @@ Here is its technology stack:
 
 This web app has been deployed in Microsoft Azure (for Backend) and Firebase Hosting (for Client):
 
-- [Breakdance](https://breakdance.github.io/breakdance/) - Click the link here. 
+- [Player Here](https://players-f1cdf.web.app/client) - Click the link here. 
 
 or 
 
@@ -29,4 +29,3 @@ or
 https://players-f1cdf.web.app/client
 ```
 
-plugins/googleanalytics/README.md>
