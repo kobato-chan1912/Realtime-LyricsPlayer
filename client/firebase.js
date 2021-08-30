@@ -147,6 +147,14 @@ $('#message').on('keypress', function (e) {
                .then(response => response.json())
                .then((data) => {
                   if (data.status == 200) {
+                     firebase.database().ref("playlist").push().set({
+                        "artist": data.artist,
+                        "coverArt": data.cover,
+                        "lyrics": data.lyrics,
+                        "streamingURL": data.streaming,
+                        "title": data.title
+                     });
+   
                      firebase.database().ref("messages").push().set({
                         "sender": "System",
                         "message": `${userName} đã thêm bài hát: ${data.title} - ${data.artist}.`
