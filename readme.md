@@ -1,3 +1,4 @@
+
 # Realtime Player 
 ## _Open-Source_
 
@@ -16,6 +17,9 @@ Here is its technology stack:
 - Listen audio completely 100% realtime. 
 - Chat feature. 
 - Request song throught ID Song of Zing MP3. The song will be added to Queue as FIFO method.
+- Stickers chat included. 
+
+<img width="356" alt="Screen Shot 2021-08-28 at 01 12 53" src="https://user-images.githubusercontent.com/62328211/131242785-fb46623b-1f72-4db0-a6fd-410051c3cde3.png">
 
 ## Deploy
 
