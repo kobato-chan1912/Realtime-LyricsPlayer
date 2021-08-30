@@ -26,11 +26,11 @@ Stacks have been used:
 
 ## Update 28 August
 
-- Stickers quobee chat included. 
+- Quobee stickers included in chatbox. 
 <p align="center">
 <img width="300" alt="Screen Shot 2021-08-30 at 11 57 28" src="https://user-images.githubusercontent.com/62328211/131287320-ff6ce174-7bd9-4969-b3fa-879a9749e9e2.png"></p>
 
-- Realtime notification when user login. 
+- Realtime notification when user logins. 
 
 <p align="center"><img width="317" alt="Screen Shot 2021-08-30 at 12 00 36" src="https://user-images.githubusercontent.com/62328211/131287612-810cf476-207d-4b06-84f9-8d860521f60d.png"></p>
 
