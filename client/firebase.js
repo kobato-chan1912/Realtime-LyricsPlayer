@@ -4,10 +4,12 @@ $('video').trigger('play');
 $('.btn-play').click();
 $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
 
+// Notiflix Constructor 
 
+Notiflix.Notify.init({ fontFamily:"Quicksand",useGoogleFont:true,position:"right-bottom", }); // 
 // userName first.
 
-var userName = "admin";
+var userName = "";
 var src = "images/node-white.png"
 Swal.fire({
    title: 'Nhập tên đăng nhập',
@@ -22,22 +24,31 @@ Swal.fire({
    confirmButtonText: 'Vào',
    showLoaderOnConfirm: true,
    preConfirm: (login) => {
-      if (login == "") {
+      if (login == "" || login == "System") {
          Swal.showValidationMessage(
             `Vui lòng không để trống tên!`
          )
       }
       else {
+         // If login is Successful. 
          userName = login;
          $("video").prop('muted', false);
          $("video").hide();
+         firebase.database().ref("messages").push().set({
+            "sender": "System",
+            "message": `${userName} vừa tham gia radio.`
+         });
+         firebase.database().ref("messages").push().set({
+            "sender": "SystemLogin",
+            "message": `${userName} vừa tham gia radio.`
+         });
       }
 
    },
    allowOutsideClick: () => !Swal.isLoading()
 });
 
-// chat render. 
+// chat render. //
 
 // Render Stickers // 
 
@@ -55,7 +66,7 @@ imagesRef.listAll()
       res.items.forEach((itemRef) => {
 
          itemRef.getDownloadURL().then(function (url) {
-            
+
             let html = ""
             html += `<span class="intercom-emoji-picker-emoji" title="thumbs_up">
                         <img src="${url}" width="50px" alt="">
@@ -80,7 +91,7 @@ firebase.database().ref("messages").on("child_added", function (snapshot) {
    let message = snapshot.val().message;
    let htmlSender = ""
    let sender = snapshot.val().sender;
-   if (sender == "Dũng Admin" || sender == "Huỳnh Lucky"){
+   if (sender == "Dũng Admin" || sender == "Huỳnh Lucky") {
       htmlSender = `<li><span style="color: red">`
    }
    else {
@@ -91,25 +102,26 @@ firebase.database().ref("messages").on("child_added", function (snapshot) {
       document.getElementById("messages").innerHTML += html;
    }
    else {
-      html += `${htmlSender}${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
-      document.getElementById("messages").innerHTML += html;
+      if (sender !== "SystemLogin") {
+         if (sender == "System") {
+            html += `<li style="color: #11ad00">${snapshot.val().message}</li>`;
+         }
+         else {
+            html += `${htmlSender}${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
+         }
+         document.getElementById("messages").innerHTML += html;
+      }
 
    }
 
-   // if (snapshot.val().sender == "Huỳnh Lucky" || snapshot.val().sender == "Dũng Admin"){
-   //    html += `<li><span style="color: red">${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
-   //    document.getElementById("messages").innerHTML += html;
-
-   // }
-   // else {
-   // html += `<li><span>${snapshot.val().sender}: </span><span>${snapshot.val().message}</span></li>`;
-   // document.getElementById("messages").innerHTML += html;
-
-   // }
 });
-firebase.database().ref("messages").endAt().limitToLast(1).on('child_added', function(snapshot) {
+firebase.database().ref("messages").endAt().limitToLast(1).on('child_added', function (snapshot) {
 
    // all records after the last continue to invoke this function
+   if (snapshot.val().sender == "SystemLogin") {
+      Notiflix.Notify.info(snapshot.val().message);
+   }
+
    $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
 
 });
@@ -118,14 +130,54 @@ firebase.database().ref("messages").endAt().limitToLast(1).on('child_added', fun
 
 $('#message').on('keypress', function (e) {
    if (e.which === 13) {
+      let messageValue = $('#message').val()
       // console.log(userName);
       // console.log($('#message').val());
-      firebase.database().ref("messages").push().set({
-         "sender": userName,
-         "message": $('#message').val()
-      });
-      $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
-      $('#message').val('');
+      if (messageValue.includes("/addsong") == true) {
+         let idString = messageValue.replace('/addsong', '')
+         try {
+            firebase.database().ref("messages").push().set({
+               "sender": "System",
+               "message": "Đang xử lý yêu cầu..."
+            });
+            $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+            $('#message').val('');
+
+            fetch('http://192.3.60.13:3000/api/getSong/' + idString)
+               .then(response => response.json())
+               .then((data) => {
+                  if (data.status == 200) {
+                     firebase.database().ref("messages").push().set({
+                        "sender": "System",
+                        "message": `${userName} đã thêm bài hát: ${data.title} - ${data.artist}.`
+                     });
+                     $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+                     $('#message').val('');
+            
+                  } else {
+                     firebase.database().ref("messages").push().set({
+                        "sender": "System",
+                        "message": `Bài hát không tồn tại.`
+                     });
+                     $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+                     $('#message').val('');
+            
+                  }
+                  
+
+               })
+         } catch (error) {
+
+         }
+      } else {
+         firebase.database().ref("messages").push().set({
+            "sender": userName,
+            "message": $('#message').val()
+         });
+         $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 1000);
+         $('#message').val('');
+
+      }
 
    }
 });
@@ -212,19 +264,7 @@ $("#add_title").click(function () {
                   });
                }
             });
-
-
-
-
-
-
-
          }
-
-         // Swal.fire({
-         //    title: `${result.value.login}'s avatar`,
-         //    imageUrl: result.value.avatar_url
-         // })
       }
    })
 
@@ -291,7 +331,6 @@ function appendData() {
          }
       });
 
-
       // src for audio. 
       firebase.database().ref('currentTime').once('value').then(function (second) {
          let url = snapshot.val().streamingURL + "#t=" + second.val().seconds;
@@ -310,8 +349,6 @@ function appendData() {
 
          });
       });
-
-
 
       $(".playerTitle").html(snapshot.val().title);
       $(".playerArtist").html(snapshot.val().artist);
@@ -339,22 +376,10 @@ function appendData() {
             // var currentTime = 0;
             var seekStart = null;
             var player = $(this);
-            // console.log(this.currentTime);
-            // firebase.database().ref("currentTime").update({ seconds: this.currentTime });
 
             if (this.currentTime == this.duration) { // if end player. 
 
                clearInterval(updateCurrent);
-               // var firstID = $("#track-list").children()[0].id;  // id in HTML Page.
-               // var stringID = firstID.replace("track", ""); // id in Database. 
-               // console.log(stringID)
-               // firebase.database().ref("playlist").child(stringID).remove();
-               // $('#' + firstID).remove();
-
-               // var listLength = $('#track-list li').length;
-               // console.log(listLength);
-               // firebase.database().ref("currentTime").update({ seconds: 0 });
-
                firebase.database().ref('playlist').once('value', function (snapshot) {
                   var nextArtist, nextTitle, nextCoverArt, nextStreaming, nextLyrics;
                   snapshot.forEach(function (childSnapshot) {
@@ -385,19 +410,9 @@ function appendData() {
 
                      }
                   });
-                  // update new playing.
-
                });
                // Delete the first element in playlist // 
-
-
-
-
-
-
             }
-
-
          });
       }, 1000);
 
@@ -456,17 +471,6 @@ firebase.database().ref("playlist").on("child_added", function (snapshot) {
    html += `<div class="title">${snapshot.val().title}</div>`
    html += `<div class="artist">${snapshot.val().artist}</div>`
    html += '</div></li>'
-
-
-   // console.log(html);
-
-   // if(snapshot.val().sender == myName){
-   //     html += "<button data-id='" + snapshot.key + "' onclick='deleteMessage(this);'>";
-   //     html += "Delete";
-   //     html += "</button>";
-   // }
-   // html+= snapshot.val().sender + ": " + snapshot.val().message;
-   // html+= "</li>";
-   document.getElementById("track-list").innerHTML += html;
+   document.getElementById("track-list").innerHTML += html; // Append to HTML // 
 
 });
