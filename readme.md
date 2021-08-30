@@ -15,7 +15,7 @@ Stacks have been used:
 ## Features
 
 - Listen audio completely - 100% realtime. 
-- Scrapt Data from ZING-MP3 API. [ZingMP3 API](https://github.com/kobato-chan1912/ZingMP3-API) - Click for bulding Zing MP3 API used NodeJS and Puppeter. 
+- Scrapt Data from [ZingMP3 API](https://github.com/kobato-chan1912/ZingMP3-API) (with NodeJS and Puppeter) 
 - Auto show lyrics if available.
 - Chatbox feature. 
 - Nice theme with transparent blured box style.
